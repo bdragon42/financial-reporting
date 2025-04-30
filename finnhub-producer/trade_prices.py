@@ -6,7 +6,6 @@ import os
 import finnhub
 import pandas as pd
 
-# Configure the Kafka producer
 producer_config = {
     'bootstrap.servers': 'localhost:9092'
 }
@@ -19,9 +18,9 @@ last_updated = None
 
 def acked(err, msg):
     if err is not None:
-        print(f"❌ Failed to deliver message: {err}")
+        print(f"Failed to deliver message: {err}")
     else:
-        print(f"✅ Message delivered to {msg.topic()} [{msg.partition()}]")
+        print(f"Message delivered to {msg.topic()} [{msg.partition()}]")
 
 def on_message(ws, message):
     print("Received", message)
@@ -33,7 +32,7 @@ def on_message(ws, message):
         )
         producer.poll(0)  # Trigger delivery callback
     except BufferError as e:
-        print(f"❗ Buffer full, waiting: {e}")
+        print(f"Buffer full, waiting: {e}")
         producer.poll(1)
 
 def should_refresh_symbols():

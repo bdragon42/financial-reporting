@@ -5,7 +5,6 @@ import statistics
 import boto3
 from datetime import datetime
 
-# AWS config (assumes credentials are in environment or IAM role is assigned)
 s3 = boto3.client('s3')
 bucket_name = 'finance-streaming-data'
 
@@ -18,9 +17,8 @@ conf = {
 consumer = Consumer(conf)
 consumer.subscribe(['finance-streaming'])
 
-print("✅ Subscribed to topic")
+print("Subscribed to topic")
 
-# Dict to store trades per symbol
 windows = {}
 start_time = time.time()
 
@@ -30,7 +28,7 @@ try:
         if msg is None:
             continue
         if msg.error():
-            print("❌ Consumer error:", msg.error())
+            print("Consumer error:", msg.error())
             continue
 
         try:
@@ -45,7 +43,7 @@ try:
                 windows[symbol].append(trade)
 
         except Exception as e:
-            print("❌ Failed to parse message:", e)
+            print("Failed to parse message:", e)
 
         if time.time() - start_time >= 60:
             for symbol, trades in windows.items():
@@ -67,6 +65,6 @@ try:
             start_time = time.time()
 
 except KeyboardInterrupt:
-    print("🛑 Exiting gracefully...")
+    print("Exiting...")
 finally:
     consumer.close()

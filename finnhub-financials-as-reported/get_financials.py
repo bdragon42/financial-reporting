@@ -7,17 +7,11 @@ import os
 import json
 
 s3 = boto3.client('s3')
-FINNHUB_API_KEY = "cvm7u61r01qnndmcnj9gcvm7u61r01qnndmcnja0"  # Replace with your actual API key
+FINNHUB_API_KEY = "cvm7u61r01qnndmcnj9gcvm7u61r01qnndmcnja0"  # This is the key provided by Finnhub for all free user accounts.
 TRACKER_KEY = "date-tracker/filing_tracker.json"
-
-pd.set_option('display.max_rows', 500)
-pd.set_option('display.max_columns', 500)
-pd.set_option('display.width', 1000)
-pd.set_option('display.max_colwidth', 1000)
 
 symbol_cache = []
 last_updated = None
-
 
 
 def load_filing_tracker(bucket):
@@ -59,16 +53,15 @@ def should_refresh_symbols():
         return True
     return False
 
-def get_symbols():
+def get_symbols(): # created for possible future scaling of pipelines
     global symbol_cache
     if not should_refresh_symbols():
         return symbol_cache
 
     finnhub_client = finnhub.Client(api_key=FINNHUB_API_KEY)
-    nasdaq_symbols = finnhub_client.stock_symbols('US')  # 'US' gives both NASDAQ and NYSE
+    nasdaq_symbols = finnhub_client.stock_symbols('US')
     df = pd.DataFrame(nasdaq_symbols)
 
-    # Filter to only Common Stocks listed on NYSE/NASDAQ
     filtered_df = df[
         (df['type'] == 'Common Stock') &
         (df['mic'].isin(['XNYS', 'XNAS'])) &
