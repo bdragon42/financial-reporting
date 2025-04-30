@@ -43,5 +43,5 @@ Thumbs.db
 *.athena
 *.sqlite
 
-finnhub-basic-financials.py
-test.py
+# Testing Folder
+.tests/

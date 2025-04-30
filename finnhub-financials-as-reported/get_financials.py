@@ -102,82 +102,42 @@ def get_financials_reported(symbol, limit=1, s3_bucket=None, tracker=None):
     df = pd.json_normalize(reports)
     print(df.columns.tolist())
 
-    # print(reports)
     if not reports:
         print(f"No financial data found for {symbol}")
         return
 
-    # latest_saved = tracker.get(symbol)
-    # new_reports = [r for r in reports if r.get('filedDate', '') > (latest_saved or "")]
-    #
-    # if not new_reports:
-    #     print(f"No new reports for {symbol}")
-    #     return
-    #
-    # if s3_bucket:
-    #     flat_rows = []
-    #     for report in new_reports:
-    #         filed_date = report.get("filedDate")
-    #         form = report.get("form")
-    #         section = report.get("report", {})
-    #
-    #         for stmt_type in ["bs", "ic", "cf"]:
-    #             for item in section.get(stmt_type, []):
-    #                 flat_rows.append({
-    #                     "symbol": symbol,
-    #                     "filedDate": filed_date,
-    #                     "form": form,
-    #                     "statement": stmt_type,
-    #                     "concept": item.get("concept"),
-    #                     "label": item.get("label"),
-    #                     "value": item.get("value"),
-    #                     "unit": item.get("unit")
-    #                 })
-    #
-    #     json_lines = "\n".join(json.dumps(row) for row in flat_rows)
-    #     upload_filings(json_lines, symbol, s3_bucket, filing_folder)
-    #
-    # latest_filed = max([r['filedDate'] for r in new_reports])
-    # tracker[symbol] = latest_filed
+    latest_saved = tracker.get(symbol)
+    new_reports = [r for r in reports if r.get('filedDate', '') > (latest_saved or "")]
 
-    # rows = []
-    #
-    # for report in reports:
-    #     filed_date = report.get("filedDate")
-    #     form = report.get("form")
-    #     section = report.get("report", {})
-    #
-    #     # Add top-level fields
-    #     common_fields = {
-    #         "symbol": symbol,
-    #         "accessNumber": report.get("accessNumber"),
-    #         "cik": report.get("cik"),
-    #         "year": report.get("year"),
-    #         "quarter": report.get("quarter"),
-    #         "form": form,
-    #         "startDate": report.get("startDate"),
-    #         "endDate": report.get("endDate"),
-    #         "filedDate": filed_date,
-    #         "acceptedDate": report.get("acceptedDate"),
-    #     }
-    #
-    #     # Create a row for each line item from bs/ic/cf
-    #     for stmt_key in ["bs", "ic", "cf"]:
-    #         for item in section.get(stmt_key, []):
-    #             flat_data = {
-    #                 **common_fields,
-    #                 "statement": stmt_key,
-    #                 "concept": item.get("concept"),
-    #                 "label": item.get("label"),
-    #                 "value": item.get("value"),
-    #                 "unit": item.get("unit")
-    #             }
-    #             rows.append(flat_data)
-    #
-    # df = pd.DataFrame(rows)
-    # df = df.sort_values(by=["filedDate", "symbol"], ascending=[False, True])
-    # print(df)
-    # return df
+    if not new_reports:
+        print(f"No new reports for {symbol}")
+        return
+
+    if s3_bucket:
+        flat_rows = []
+        for report in new_reports:
+            filed_date = report.get("filedDate")
+            form = report.get("form")
+            section = report.get("report", {})
+
+            for stmt_type in ["bs", "ic", "cf"]:
+                for item in section.get(stmt_type, []):
+                    flat_rows.append({
+                        "symbol": symbol,
+                        "filedDate": filed_date,
+                        "form": form,
+                        "statement": stmt_type,
+                        "concept": item.get("concept"),
+                        "label": item.get("label"),
+                        "value": item.get("value"),
+                        "unit": item.get("unit")
+                    })
+
+        json_lines = "\n".join(json.dumps(row) for row in flat_rows)
+        upload_filings(json_lines, symbol, s3_bucket, filing_folder)
+
+    latest_filed = max([r['filedDate'] for r in new_reports])
+    tracker[symbol] = latest_filed
 
 # Example usage
 if __name__ == "__main__":

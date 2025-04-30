@@ -12,7 +12,7 @@ producer_config = {
 }
 producer = Producer(producer_config)
 
-key = "cvm7u61r01qnndmcnj9gcvm7u61r01qnndmcnja0"
+key = "cvm7u61r01qnndmcnj9gcvm7u61r01qnndmcnja0" # This is the key provided by Finnhub for all free user accounts.
 
 symbol_cache = []
 last_updated = None
@@ -44,7 +44,8 @@ def should_refresh_symbols():
         return True
     return False
 
-def get_symbols():
+
+def get_symbols(): # created for possible future scaling of pipelines
     global symbol_cache
     if not should_refresh_symbols():
         return symbol_cache
