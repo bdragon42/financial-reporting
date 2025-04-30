@@ -1,0 +1,47 @@
+# Byte-compiled / cache files
+__pycache__/
+*.py[cod]
+*.so
+
+# Virtual environment
+.venv/
+venv/
+
+# PyCharm project files
+.idea/
+
+# Environment variables
+.env
+*.env
+
+# Logs
+*.log
+
+# Unit test output
+htmlcov/
+coverage.xml
+*.cover
+*.py,cover
+
+# Docker
+*.pid
+docker-compose.override.yml
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# AWS credentials & config (if saved locally for scripts)
+.aws/
+*.pem
+
+# Output data files (if generated)
+*.csv
+*.parquet
+*.jsonl
+*.db
+*.athena
+*.sqlite
+
+finnhub-basic-financials.py
+test.py
