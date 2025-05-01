@@ -3,12 +3,31 @@ import json
 from confluent_kafka import Producer
 from datetime import datetime, timedelta
 import os
-import finnhub
-import pandas as pd
+# import finnhub
+# import pandas as pd
+
+
+
+### For Local Testing ###
+# producer_config = {
+#     'bootstrap.servers': 'localhost:9092'
+# }
+
+
+### For Cluster ###
+with open("/etc/kafka-auth/username") as f:
+    username = f.read().strip()
+with open("/etc/kafka-auth/password") as f:
+    password = f.read().strip()
 
 producer_config = {
-    'bootstrap.servers': 'localhost:9092'
+    'bootstrap.servers': 'kafka.default.svc.cluster.local:9092',
+    'security.protocol': 'SASL_PLAINTEXT',
+    'sasl.mechanism': 'SCRAM-SHA-256',
+    'sasl.username': username,
+    'sasl.password': password
 }
+
 producer = Producer(producer_config)
 
 key = "cvm7u61r01qnndmcnj9gcvm7u61r01qnndmcnja0" # This is the key provided by Finnhub for all free user accounts.
@@ -43,26 +62,26 @@ def should_refresh_symbols():
         return True
     return False
 
-
-def get_symbols(): # created for possible future scaling of pipelines
-    global symbol_cache
-    if not should_refresh_symbols():
-        return symbol_cache
-
-    finnhub_client = finnhub.Client(api_key=key)
-    nasdaq_symbols = finnhub_client.stock_symbols('US')  # 'US' gives both NASDAQ and NYSE
-    df = pd.DataFrame(nasdaq_symbols)
-
-    # Filter to only Common Stocks listed on NYSE/NASDAQ
-    filtered_df = df[
-        (df['type'] == 'Common Stock') &
-        (df['mic'].isin(['XNYS', 'XNAS'])) &
-        (df['currency'] == 'USD')
-        ]
-
-    filtered_symbols = filtered_df['symbol'].tolist()[:50]
-
-    return filtered_symbols
+### Created for possible future scaling of pipelines
+# def get_symbols():
+#     global symbol_cache
+#     if not should_refresh_symbols():
+#         return symbol_cache
+#
+#     finnhub_client = finnhub.Client(api_key=key)
+#     nasdaq_symbols = finnhub_client.stock_symbols('US')  # 'US' gives both NASDAQ and NYSE
+#     df = pd.DataFrame(nasdaq_symbols)
+#
+#     # Filter to only Common Stocks listed on NYSE/NASDAQ
+#     filtered_df = df[
+#         (df['type'] == 'Common Stock') &
+#         (df['mic'].isin(['XNYS', 'XNAS'])) &
+#         (df['currency'] == 'USD')
+#         ]
+#
+#     filtered_symbols = filtered_df['symbol'].tolist()[:50]
+#
+#     return filtered_symbols
 
 
 def on_open(ws, symbols):
