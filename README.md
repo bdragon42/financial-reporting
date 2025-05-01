@@ -10,23 +10,12 @@ This project is a real-time streaming and financial data ingestion pipeline buil
 
 | Component | Description |
 |----------|-------------|
-| `producer` (Docker) | Connects to Finnhub WebSocket API and streams trade data |
-| `consumer` (Docker) | Consumes trade data from Kafka and writes JSONL to S3 |
-| `filing_collector` (Docker) | Periodically fetches SEC/financial reports via Finnhub REST API |
+| `producer` | Connects to Finnhub WebSocket API and streams trade data |
+| `consumer` | Consumes trade data from Kafka and writes JSONL to S3 |
+| `filing_collector` | Periodically fetches SEC/financial reports via Finnhub REST API |
 | AWS Glue Crawlers | Crawl S3 folders (trades + filings), update Glue Catalog schemas |
 | Redshift Spectrum | Queries external tables directly from S3 via Glue |
-
----
-
-### 🛠 Technologies Used
-
-- **Kafka** (Dockerized) for real-time messaging
-- **AWS S3** for raw JSONL storage
-- **AWS Glue** for schema discovery and cataloging
-- **AWS Redshift Spectrum** for querying external data
-- **Python** for all ingestion and transformation logic
-
-*Currently deployed using Docker Compose for local development and testing. Kubernetes manifests are planned for production-ready orchestration and scaling.*
+| K3s | lightweight version of kubernetes to be ran on a single EC2 instance |
 
 ---
 
