@@ -3,6 +3,8 @@
 This project is a real-time streaming and financial data ingestion pipeline built to process both **trade data** and **financial report filings** for a curated set of stock symbols. 
 It utilizes **Kafka**, **AWS**, **Kubernetes**, **MongoDB** and **Glue + Redshift Spectrum** to produce a scalable data platform for downstream analytics and potential trading research.
 
+README's for various portions of the project detailing nuances of what I was going through will be available within the associated folders.
+
 ---
 ### Financial Analysis & Metrics
 This section focuses on ingesting and transforming financial data to build meaningful metrics that drive decision-making.
