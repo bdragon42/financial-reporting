@@ -25,10 +25,7 @@ https://github.com/bdragon42/financial-reporting/blob/master/finance_streaming_a
 
 ## Data Flow Diagram
 
-![Kafka Streaming Architecture](https://raw.githubusercontent.com/bdragon42/financial-reporting/master/finance_streaming_architecture.drawio.png)
-
-
-
+![Kafka Streaming Architecture](https://raw.githubusercontent.com/bdragon42/financial-reporting/master/finance_streaming_architecture.drawio%20(1).png)
 
 ---
 
