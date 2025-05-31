@@ -21,18 +21,12 @@ This project is a real-time streaming and financial data ingestion pipeline buil
 
 ---
 
-## Data Flow Diagram
-  Batch Analytics:
-  1. **Trade Producer** connects to Finnhub WebSocket and streams live trade events into Kafka topics.
-  2. **Trade Consumer** reads from Kafka and writes per-symbol trade data to S3 in `.jsonl` format (partitioned by date and symbol).
-  3. **Kafka Sink** reads from kafka and writes per-symbol trade data to a MongoDB database. 
-  4. **Filing Collector** periodically pulls financial statement submissions via REST API and stores those in a separate S3 folder.
-  5. Two AWS Glue Crawlers index both S3 locations and create separate databases (`trades_db`, `filings_db`) in the AWS Glue Data Catalog.
-  6. Redshift Spectrum queries the Glue databases via external schemas.
-  
-  *The Finnhub API key used is the one provided by Finnhub for all free user accounts.*
+https://github.com/bdragon42/financial-reporting/blob/master/finance_streaming_architecture.drawio.png
 
-  Streaming Analytics:
+## Data Flow Diagram
+
+![Kafka Streaming Architecture](https://raw.githubusercontent.com/bdragon42/financial-reporting/master/finance_streaming_architecture.drawio.png)
+
 
 
 
