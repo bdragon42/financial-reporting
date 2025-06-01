@@ -1,0 +1,4 @@
+finnhub-python
+boto3
+pandas
+requests

@@ -4,6 +4,7 @@ import time
 import statistics
 import boto3
 from datetime import datetime
+from decimal import Decimal
 import os
 
 def main():
@@ -80,7 +81,8 @@ def main():
                         volatility = statistics.stdev(prices) if len(prices) > 1 else 0
 
                     now = datetime.utcnow()
-                    path = f"trades/{symbol}/{now.year}/{now.month:02}/{now.day:02}.jsonl"
+                    timestamp = now.strftime("%H%M%S")
+                    path = f"trades/{symbol}/{now.year}/{now.month:02}/{now.day:02}/{timestamp}.jsonl"
                     data_jsonl = '\n'.join(json.dumps(t) for t in trades)
                     s3.put_object(Bucket=bucket_name, Key=path, Body=data_jsonl.encode('utf-8'))
 
